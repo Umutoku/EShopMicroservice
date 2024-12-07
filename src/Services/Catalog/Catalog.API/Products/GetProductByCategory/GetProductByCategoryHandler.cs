@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
+using BuildingBlocks.Exceptions;
 using Catalog.API.Exceptions;
 using Catalog.API.Models;
 using Catalog.API.Products.GetProductById;
@@ -19,7 +20,7 @@ namespace Catalog.API.Products.GetProductByCategory
             var products = await documentSession.Query<Product>()
                 .Where(p => p.Category.Contains(request.Category)).ToListAsync(cancellationToken);
 
-            return products == null ? throw new ProductNotFoundException() : new GetProductByCategoryResult(products);
+            return products == null ? throw new NotFoundException(request.Category) : new GetProductByCategoryResult(products);
         }
     }
 }
